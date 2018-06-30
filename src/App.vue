@@ -1,28 +1,51 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <ticket-selection></ticket-selection>
+    <ticket-count></ticket-count>
+    <applicant-info></applicant-info>
+    <participants-info
+      v-for="count in ticketsCount"
+      :key="count"
+      :index="count"
+    ></participants-info>
+    <ticket-submit></ticket-submit>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TicketSelection from './components/TicketSelection'
+import TicketCount from './components/TicketCount'
+import ApplicantInfo from './components/ApplicantInfo'
+import ParticipantsInfo from './components/ParticipantsInfo'
+import TicketSubmit from './components/TicketSubmit'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    TicketSubmit,
+    ParticipantsInfo,
+    TicketSelection,
+    TicketCount,
+    ApplicantInfo
+  },
+  data: function () {
+    return {
+      ticketsCount: 10
+    }
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+  html {
+    background-color: #f2f2f2;
+  }
+
+  .section {
+    margin-bottom: 20px;
+
+    .header {
+      margin: 8px;
+    }
+  }
 </style>
