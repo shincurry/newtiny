@@ -6,8 +6,8 @@
       title="份数"
     >
       <template slot="title">
-        <div>共 {{ ticketsCount }} 张票</div>
-        <div>合计 {{ totalAmount }} 元</div>
+        <div>共 <span class="total-amount">{{ ticketsCount }}</span> 张票</div>
+        <div>合计 <price-span class="total-price" :value="totalAmount"></price-span> 元</div>
       </template>
       <van-button
         type="primary"
@@ -24,9 +24,11 @@
 <script>
 import { Toast } from 'vant'
 import { mapFields, mapMultiRowFields } from 'vuex-map-fields'
+import PriceSpan from './PriceSpan'
 
 export default {
   name: 'TicketSubmit',
+  components: {PriceSpan},
   data: function () {
     return {
       submiting: false
@@ -97,6 +99,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
+<style lang="scss" scoped>
+  .total-amount, .total-price {
+    color: #44bb00;
+  }
 </style>

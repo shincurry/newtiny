@@ -7,7 +7,7 @@
   >
     <van-row justify="center" align="center">
       <van-col span="10" offset="7">
-        <div class="price">{{ ticket.price }} 元</div>
+        <div class="price"><price-span :value="ticket.price"></price-span> 元</div>
         <div
           class="rest"
           v-show="showRestMessage"
@@ -21,8 +21,11 @@
 </template>
 
 <script>
+import PriceSpan from './PriceSpan'
+
 export default {
   name: 'TicketSelectionCell',
+  components: {PriceSpan},
   props: {
     ticket: {
       type: Object,
@@ -48,6 +51,10 @@ export default {
 <style lang="scss" scoped>
   .ticket-selection-cell {
     min-height: 60px;
+  }
+
+  .price, .rest {
+    line-height: 1rem;
   }
 
   .rest {

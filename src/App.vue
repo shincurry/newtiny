@@ -58,4 +58,14 @@ export default {
       margin: 8px;
     }
   }
+
+  /*
+   * Vant Style Override
+   */
+  .van-cell__title {
+    font-weight: bolder;
+  }
+  .van-cell__label {
+    font-weight: normal;
+  }
 </style>
