@@ -3,15 +3,21 @@ import Vuex from 'vuex'
 
 import { getField, updateField } from 'vuex-map-fields'
 import { PUSH_NEW_PARTICIPANTS_INFOS, POP_PARTICIPANT_INFOS } from './mutation-types'
+import API from './api'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     /*
+    * 页面初始化加载状态
+    * 'init' | 'loading' | 'error' | 'complete'
+    * */
+    status: 'init',
+    /*
     * 页面是否处于初始加载状态中
     * */
-    loading: true,
+    loading: false,
     /*
     * 可选票种类和相关信息
     * Array [{
@@ -57,7 +63,27 @@ export default new Vuex.Store({
     }]
   },
   getters: {
-    getField
+    getField,
+    /*
+    * 总金额
+    * */
+    totalAmount: function (state, getters) {
+      /*
+      * 如果可选票种为空，则总金额为 0
+      * */
+      if (state.availableTickets.length === 0) {
+        return 0
+      }
+
+      let count = state.ticketsCount
+      let selected = state.selectedTicket
+      let filtered = state.availableTickets.filter((t) => t.type === selected)
+      if (filtered.length === 0) {
+        return 0
+      }
+      let price = filtered[0].price
+      return price * count
+    }
   },
   mutations: {
     updateField,
@@ -73,37 +99,36 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    updateAvailableTickets (context) {
-      // network fetch balabala...
-      let tickets = [{
-        type: '标准票',
-        note: '',
-        price: 199.00,
-        rest: 3
-      },
-      {
-        type: '站票',
-        note: '无座位，可自备小板凳',
-        price: 99.00,
-        rest: 99
-      },
-      {
-        type: '远程支持票',
-        note: '可获得活动 PPT 等资料',
-        price: 9.99,
-        rest: 99
-      },
-      {
-        type: '赞助商',
-        note: '获得品牌露出机会，详情联系...',
-        price: 999.99,
-        rest: 99
-      }]
-      context.state.availableTickets = tickets
-      let filtered = tickets.filter((t) => t.rest > 0)
-      if (filtered.length > 0) {
-        context.state.selectedTicket = filtered[0].type
-      }
+    fetchAvailableTickets (context) {
+      context.state.status = 'loading'
+      API.getAvailableTickets()
+        .then((response) => {
+          context.state.status = 'complete'
+          let tickets = response.data.data
+          context.state.availableTickets = tickets
+          let filtered = tickets.filter((t) => t.rest > 0)
+          if (filtered.length > 0) {
+            context.state.selectedTicket = filtered[0].type
+          }
+        })
+        .catch(() => {
+          context.state.status = 'error'
+        })
+    },
+    submitTicketsPurchaseInfo (context) {
+      let {
+        selectedTicket,
+        ticketsCount,
+        applicantInfo,
+        participantsInfos
+      } = context.state
+      API.postTicketsPurchaseInfo({
+        selectedTicket,
+        ticketsCount,
+        applicantInfo,
+        participantsInfos,
+        totalAmount: context.getters.totalAmount
+      })
     },
     pushParticipantsInfos (context) {
       context.commit(PUSH_NEW_PARTICIPANTS_INFOS)

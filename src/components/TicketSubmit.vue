@@ -9,7 +9,13 @@
         <div>共 {{ ticketsCount }} 张票</div>
         <div>合计 {{ totalAmount }} 元</div>
       </template>
-      <van-button type="primary" size="large">立即支付</van-button>
+      <van-button
+        type="primary"
+        size="large"
+        @click="submit"
+      >
+        立即支付
+      </van-button>
     </van-cell>
   </div>
 </template>
@@ -23,13 +29,15 @@ export default {
     ...mapFields([
       'ticketsCount',
       'selectedTicket',
-      'availableTickets'
+      'availableTickets',
     ]),
     totalAmount: function () {
-      let count = this.ticketsCount
-      let selected = this.selectedTicket
-      let price = this.availableTickets.filter((t) => t.type === selected)[0].price
-      return price * count
+      return this.$store.getters.totalAmount
+    }
+  },
+  methods: {
+    submit () {
+      this.$store.dispatch('submitTicketsPurchaseInfo')
     }
   }
 }

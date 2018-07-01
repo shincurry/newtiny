@@ -30,7 +30,7 @@ export default {
     ApplicantInfo
   },
   created: function () {
-    this.$store.dispatch('updateAvailableTickets')
+    this.$store.dispatch('fetchAvailableTickets')
   },
   computed: {
     ticketsCount: function () {

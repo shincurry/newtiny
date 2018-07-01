@@ -51,11 +51,21 @@ export default {
     },
     maxSelection: function () {
       /*
+      * 如果可选票种为空，则最大购票数为 0
+      * */
+      if (this.availableTickets.length === 0) {
+        return 0
+      }
+
+      /*
       * 根据当前选择种类的票剩余数量，限制可选择的最大购票数
       * */
       let selected = this.selectedTicket
-      let rest = this.availableTickets.filter((t) => t.type === selected)[0].rest
-      return rest
+      let filtered = this.availableTickets.filter((t) => t.type === selected)
+      if (filtered.length === 0) {
+        return 0
+      }
+      return filtered[0].rest
     }
   }
 }
