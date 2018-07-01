@@ -12,6 +12,7 @@
       <van-button
         type="primary"
         size="large"
+        :loading="submiting"
         @click="submit"
       >
         立即支付
@@ -21,10 +22,16 @@
 </template>
 
 <script>
+import { Toast } from 'vant'
 import { mapFields, mapMultiRowFields } from 'vuex-map-fields'
 
 export default {
   name: 'TicketSubmit',
+  data: function () {
+    return {
+      submiting: false
+    }
+  },
   computed: {
     ...mapFields([
       'ticketsCount',
@@ -62,7 +69,28 @@ export default {
       if (this.formError.length !== 0) {
         return
       }
-      this.$store.dispatch('submitTicketsPurchaseInfo')
+
+      this.$dialog.confirm({
+        title: '确定要提交订单吗？',
+        message: `共 ${this.ticketsCount} 张票，合计 ${this.totalAmount} 元。`,
+        confirmButtonText: '确认订单',
+        lockScroll: true,
+        closeOnClickOverlay: true
+      })
+        .then(() => {
+          this.submiting = true
+          this.$store.dispatch('submitTicketsPurchaseInfo')
+            .then(() => {
+              this.submiting = false
+              Toast.success('提交订单成功')
+            })
+            .catch(() => {
+              this.submiting = false
+              Toast.fail('提交订单失败')
+            })
+        })
+        .catch(() => {
+        })
     }
   }
 }

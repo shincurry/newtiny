@@ -10,12 +10,6 @@ export default class API {
 
   static postTicketsPurchaseInfo (data) {
     let url = `${this.baseUrl}/submitTicketsPurchaseInfo`
-    axios.post(url, data)
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    return axios.post(url, data)
   }
 }

@@ -139,12 +139,20 @@ export default new Vuex.Store({
         applicantInfo,
         participantsInfos
       } = context.state
-      API.postTicketsPurchaseInfo({
-        selectedTicket,
-        ticketsCount,
-        applicantInfo,
-        participantsInfos,
-        totalAmount: context.getters.totalAmount
+      return new Promise((resolve, reject) => {
+        API.postTicketsPurchaseInfo({
+          selectedTicket,
+          ticketsCount,
+          applicantInfo,
+          participantsInfos,
+          totalAmount: context.getters.totalAmount
+        })
+          .then((response) => {
+            resolve(response)
+          })
+          .catch((error) => {
+            reject(error)
+          })
       })
     },
     pushParticipantsInfos (context) {
