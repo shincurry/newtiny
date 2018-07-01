@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapFields } from 'vuex-map-fields'
+import { mapFields, mapMultiRowFields } from 'vuex-map-fields'
 
 export default {
   name: 'TicketSubmit',
@@ -30,13 +30,38 @@ export default {
       'ticketsCount',
       'selectedTicket',
       'availableTickets',
+      'applicantInfo',
+      'formError'
+    ]),
+    ...mapMultiRowFields([
+      'participantsInfos'
     ]),
     totalAmount: function () {
       return this.$store.getters.totalAmount
     }
   },
   methods: {
+    validate () {
+      if (this.applicantInfo.phone.length === 0) {
+        this.$store.dispatch('addError', 'applicant-phone-empty')
+      }
+      if (this.applicantInfo.email.length === 0) {
+        this.$store.dispatch('addError', 'applicant-email-empty')
+      }
+      this.participantsInfos.forEach((info, index) => {
+        if (info.name.length === 0) {
+          this.$store.dispatch('addError', `participant-${index + 1}-name-empty`)
+        }
+        if (info.idCard.length === 0) {
+          this.$store.dispatch('addError', `participant-${index + 1}-idCard-empty`)
+        }
+      })
+    },
     submit () {
+      this.validate()
+      if (this.formError.length !== 0) {
+        return
+      }
       this.$store.dispatch('submitTicketsPurchaseInfo')
     }
   }

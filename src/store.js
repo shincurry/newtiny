@@ -2,7 +2,12 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import { getField, updateField } from 'vuex-map-fields'
-import { PUSH_NEW_PARTICIPANTS_INFOS, POP_PARTICIPANT_INFOS } from './mutation-types'
+import {
+  PUSH_NEW_PARTICIPANTS_INFOS,
+  POP_PARTICIPANT_INFOS,
+  ADD_ERROR,
+  REMOVE_ERROR
+} from './mutation-types'
 import API from './api'
 
 Vue.use(Vuex)
@@ -60,7 +65,11 @@ export default new Vuex.Store({
       name: '',
       idCard: '',
       gender: '不愿透露'
-    }]
+    }],
+    /*
+    * 表单验证
+    * */
+    formError: []
   },
   getters: {
     getField,
@@ -96,6 +105,14 @@ export default new Vuex.Store({
     },
     [POP_PARTICIPANT_INFOS] (state) {
       state.participantsInfos.pop()
+    },
+    [ADD_ERROR] (state, err) {
+      console.log(typeof err)
+      state.formError.push(err)
+    },
+    [REMOVE_ERROR] (state, err) {
+      let index = state.formError.indexOf(err)
+      if (index !== -1) state.formError.splice(index, 1)
     }
   },
   actions: {
@@ -135,6 +152,12 @@ export default new Vuex.Store({
     },
     popParticipantsInfos (context) {
       context.commit(POP_PARTICIPANT_INFOS)
+    },
+    addError (context, err) {
+      context.commit(ADD_ERROR, err)
+    },
+    removeError (context, err) {
+      context.commit(REMOVE_ERROR, err)
     }
   }
 })

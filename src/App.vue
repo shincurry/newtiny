@@ -10,6 +10,7 @@
       :index="count"
     ></participants-info>
     <ticket-submit v-show="showPage"></ticket-submit>
+    <loading-indicator></loading-indicator>
   </div>
 </template>
 
@@ -19,10 +20,12 @@ import TicketCount from './components/TicketCount'
 import ApplicantInfo from './components/ApplicantInfo'
 import ParticipantsInfo from './components/ParticipantsInfo'
 import TicketSubmit from './components/TicketSubmit'
+import LoadingIndicator from './components/LoadingIndicator'
 
 export default {
   name: 'app',
   components: {
+    LoadingIndicator,
     TicketSubmit,
     ParticipantsInfo,
     TicketSelection,
