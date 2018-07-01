@@ -76,7 +76,7 @@ export default new Vuex.Store({
     /*
     * 总金额
     * */
-    totalAmount: function (state, getters) {
+    totalPrice: function (state, getters) {
       /*
       * 如果可选票种为空，则总金额为 0
       * */
@@ -107,7 +107,6 @@ export default new Vuex.Store({
       state.participantsInfos.pop()
     },
     [ADD_ERROR] (state, err) {
-      console.log(typeof err)
       state.formError.push(err)
     },
     [REMOVE_ERROR] (state, err) {
@@ -145,7 +144,7 @@ export default new Vuex.Store({
           ticketsCount,
           applicantInfo,
           participantsInfos,
-          totalAmount: context.getters.totalAmount
+          totalPrice: context.getters.totalPrice
         })
           .then((response) => {
             resolve(response)

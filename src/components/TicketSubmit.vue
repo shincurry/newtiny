@@ -7,7 +7,7 @@
     >
       <template slot="title">
         <div>共 <span class="total-amount">{{ ticketsCount }}</span> 张票</div>
-        <div>合计 <price-span class="total-price" :value="totalAmount"></price-span> 元</div>
+        <div>合计 <price-span class="total-price" :value="totalPrice"></price-span> 元</div>
       </template>
       <van-button
         type="primary"
@@ -45,8 +45,8 @@ export default {
     ...mapMultiRowFields([
       'participantsInfos'
     ]),
-    totalAmount: function () {
-      return this.$store.getters.totalAmount
+    totalPrice: function () {
+      return this.$store.getters.totalPrice
     }
   },
   methods: {
@@ -74,7 +74,7 @@ export default {
 
       this.$dialog.confirm({
         title: '确定要提交订单吗？',
-        message: `共 ${this.ticketsCount} 张票，合计 ${this.totalAmount} 元。`,
+        message: `共 ${this.ticketsCount} 张票，合计 ${this.totalPrice} 元。`,
         confirmButtonText: '确认订单',
         lockScroll: true,
         closeOnClickOverlay: true

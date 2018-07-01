@@ -40,10 +40,8 @@ export default {
         * */
         if (newValue < this.ticketsCount) {
           this.$store.dispatch('popParticipantsInfos')
-          console.log('popParticipantsInfos')
         } else {
           this.$store.dispatch('pushParticipantsInfos')
-          console.log('pushParticipantsInfos')
         }
         // mapFields<ticketsCount> setter
         this.ticketsCount = newValue
