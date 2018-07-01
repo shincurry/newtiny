@@ -1,13 +1,22 @@
 <template>
   <div
-    v-show="show"
+    v-show="!isCompelete"
     class="loading-indicator"
   >
     <van-loading
-      class="loader"
+      v-show="isLoading"
+      class="loader indicator"
       color="black"
       size="60px"
     ></van-loading>
+    <div
+      v-show="isFailed"
+      class="error indicator"
+    >
+      <van-icon class="icon" name="clear"/>
+      <div class="message">加载失败</div>
+    </div>
+
   </div>
 </template>
 
@@ -20,8 +29,14 @@ export default {
     ...mapFields([
       'status'
     ]),
-    show: function () {
+    isLoading: function () {
       return this.status === 'loading'
+    },
+    isFailed: function () {
+      return this.status === 'error'
+    },
+    isCompelete: function () {
+      return this.status === 'complete'
     }
   }
 }
@@ -37,12 +52,25 @@ export default {
     right: 0;
     background-color: #f2f2f2;
 
-    .loader {
+    .indicator {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translateY(-50%);
       transform: translateX(-50%);
+    }
+
+    .error {
+      top: 40%;
+      .icon {
+        color: #d80000;
+        font-size: 80px;
+      }
+      .message {
+        text-align: center;
+        margin: 12px auto;
+        font-size: 16px;
+      }
     }
   }
 </style>
