@@ -1,21 +1,13 @@
 <template>
   <div class="ticket-selection section">
     <div class="header">选择票种</div>
-    <!--<ticket-selection-cell-->
-      <!--v-for="ticket in tickets"-->
-      <!--:key="ticket.title"-->
-      <!--:title="ticket.title"-->
-      <!--:label="ticket.label"-->
-      <!--:price="ticket.price"-->
-      <!--:rest="ticket.rest"-->
-    <!--&gt;</ticket-selection-cell>-->
-    <van-radio-group v-model="radio">
+    <van-radio-group v-model="selected">
       <van-list>
         <van-cell-group>
           <ticket-selection-cell
             class="ticket"
-            v-for="ticket in tickets"
-            :key="ticket.title"
+            v-for="ticket in availableTickets"
+            :key="ticket.type"
             :ticket="ticket"
           >
           </ticket-selection-cell>
@@ -26,6 +18,7 @@
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields'
 import TicketSelectionCell from './TicketSelectionCell'
 
 export default {
@@ -33,22 +26,31 @@ export default {
   components: {
     TicketSelectionCell
   },
-  data: () => {
-    return {
-      radio: '1',
-      tickets: [
-        {
-          title: '标准票',
-          price: 199,
-          rest: 2
-        },
-        {
-          title: '站票',
-          label: '无座位，可自备小板凳',
-          price: 99,
-          rest: 99
+
+  computed: {
+    ...mapFields([
+      'selectedTicket',
+      'availableTickets',
+      'ticketsCount'
+    ]),
+    /*
+    * wrapper for mapFields<selectedTicket>
+    * */
+    selected: {
+      get: function () {
+        // mapFields<selectedTicket> getter
+        return this.selectedTicket
+      },
+      set: function (newValue) {
+        /*
+        * 当选择其他种类的票时，重置购票数为 1
+        * */
+        if (this.selectedTicket !== newValue) {
+          this.ticketsCount = 1
         }
-      ]
+        // mapFields<selectedTicket> setter
+        this.selectedTicket = newValue
+      }
     }
   }
 }

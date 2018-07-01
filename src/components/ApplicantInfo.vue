@@ -26,9 +26,15 @@
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields'
+
 export default {
   name: 'ApplicantInfo',
-  props: {
+  computed: {
+    ...mapFields([
+      'applicantInfo.phone',
+      'applicantInfo.email',
+    ])
   }
 }
 </script>

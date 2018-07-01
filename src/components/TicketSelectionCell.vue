@@ -1,33 +1,22 @@
 <template>
   <van-cell
     class="ticket-selection-cell ticket"
-    center="true"
-    :title="ticket.title"
-    :label="ticket.label"
+    :center="true"
+    :title="ticket.type"
+    :label="ticket.note"
   >
     <van-row justify="center" align="center">
-      <van-col span="8" offset="10">
+      <van-col span="10" offset="7">
         <div class="price">{{ ticket.price }} 元</div>
         <div
           class="rest"
           v-show="showRestMessage"
         >还剩 {{ ticket.rest }} 张</div>
       </van-col>
-      <van-col span="4" offset="2">
-        <van-radio class="select-radio" :name="ticket.title"/>
+      <van-col span="4" offset="3">
+        <van-radio class="select-radio" :name="ticket.type" :disabled="ticket.rest === 0"/>
       </van-col>
     </van-row>
-
-    <!--<span class="ticket-info">-->
-      <!--<span class="price">{{ ticket.price }} 元</span>-->
-      <!--<span-->
-        <!--class="rest"-->
-        <!--v-show="showRestMessage"-->
-      <!--&gt;还剩 {{ ticket.rest }} 张</span>-->
-    <!--</span>-->
-    <!--<span class="select-radio">-->
-      <!--<van-radio :name="ticket.title"/>-->
-    <!--</span>-->
   </van-cell>
 </template>
 
@@ -39,7 +28,8 @@ export default {
       type: Object,
       default: function () {
         return {
-          title: '',
+          type: '',
+          note: '',
           price: 0,
           rest: 99
         }
@@ -57,7 +47,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
   .ticket-selection-cell {
-    min-height: 80px;
+    min-height: 60px;
   }
 
   .rest {

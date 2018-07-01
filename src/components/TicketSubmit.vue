@@ -2,12 +2,12 @@
   <div class="ticket-submit section">
     <van-cell
       class="ticket-selection-cell ticket"
-      center="true"
+      :center="true"
       title="份数"
     >
       <template slot="title">
-        <div>共 14 张票</div>
-        <div>合计 388.68 元</div>
+        <div>共 {{ ticketsCount }} 张票</div>
+        <div>合计 {{ totalAmount }} 元</div>
       </template>
       <van-button type="primary" size="large">立即支付</van-button>
     </van-cell>
@@ -15,9 +15,22 @@
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields'
+
 export default {
   name: 'TicketSubmit',
-  props: {
+  computed: {
+    ...mapFields([
+      'ticketsCount',
+      'selectedTicket',
+      'availableTickets'
+    ]),
+    totalAmount: function () {
+      let count = this.ticketsCount
+      let selected = this.selectedTicket
+      let price = this.availableTickets.filter((t) => t.type === selected)[0].price
+      return price * count
+    }
   }
 }
 </script>
